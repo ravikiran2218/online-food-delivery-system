@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif;}
+        body{
+            background:#f3f4f6;
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:30px;
+        }
+
+        .wrap{
+            width:100%;
+            max-width:520px;
+        }
+
+        .title{
+            text-align:center;
+            font-size:34px;
+            font-weight:900;
+            margin-bottom:20px;
+            color:#111827;
+        }
+
+        .card{
+            background:white;
+            border-radius:14px;
+            padding:22px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.18);
+            border:1px solid #e5e7eb;
+        }
+
+        label{
+            display:block;
+            font-weight:800;
+            color:#111827;
+            margin-bottom:8px;
+            margin-top:14px;
+        }
+
+        input, textarea{
+            width:100%;
+            padding:12px 12px;
+            border:1px solid #d1d5db;
+            border-radius:10px;
+            outline:none;
+            font-size:15px;
+            background:#fff;
+        }
+
+        textarea{
+            min-height:110px;
+            resize:vertical;
+        }
+
+        input:focus, textarea:focus{
+            border-color:#ff5722;
+            box-shadow:0 0 0 3px rgba(255,87,34,0.20);
+        }
+
+        button{
+            width:100%;
+            margin-top:18px;
+            padding:13px 14px;
+            background:#ff5722;
+            color:white;
+            border:none;
+            border-radius:12px;
+            font-size:16px;
+            font-weight:900;
+            cursor:pointer;
+            transition:0.2s;
+        }
+
+        button:hover{
+            background:#e64a19;
+        }
+
+        .links{
+            display:flex;
+            justify-content:space-between;
+            margin-top:14px;
+        }
+
+        .links a{
+            text-decoration:none;
+            font-weight:800;
+            color:#111827;
+        }
+
+        .links a:hover{
+            color:#ff5722;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="title">Checkout</div>
+
+    <div class="card">
+        <form method="POST">
+            {% csrf_token %}
+
+            <label>Name</label>
+            <input type="text" name="customer_name" placeholder="Enter your name" required>
+
+            <label>Address</label>
+            <textarea name="address" placeholder="Enter your delivery address" required></textarea>
+
+            <button type="submit">Place Order</button>
+
+            <div class="links">
+                <a href="/cart/">← Back to Cart</a>
+                <a href="/">Menu →</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html> 

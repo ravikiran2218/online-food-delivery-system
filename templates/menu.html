@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Foodie Hub</title>
+
+    <style>
+        :root{
+            /* ✅ CHANGE MENU SECTION BACKGROUND HERE */
+            --menu-bg: #f4f4f4;   /* try: #111, #fff7ed, #eaf6ff */
+            --primary: #ff5722;
+            --text-dark: #111;
+            --muted: #6b7280;
+        }
+
+        *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif;}
+        body{background:#000;color:white;overflow-x:hidden;}
+
+        /* Navbar */
+        .nav{
+            position:fixed;top:0;left:0;right:0;
+            display:flex;align-items:center;justify-content:space-between;
+            padding:18px 60px;background:rgba(0,0,0,0.55);
+            backdrop-filter: blur(6px);z-index:999;
+        }
+        .brand{font-weight:900;letter-spacing:2px;}
+        .nav ul{list-style:none;display:flex;gap:25px;}
+        .nav a{color:white;text-decoration:none;font-weight:800;opacity:.9;}
+        .nav a:hover{color:var(--primary);opacity:1;}
+        .btn-sm{
+            padding:10px 16px;background:var(--primary);
+            border-radius:10px;font-weight:900;text-decoration:none;color:white;
+        }
+        .btn-sm:hover{background:#e64a19;}
+
+        /* Full background slider (NO BLUR) */
+        .bg-slider{
+            position:fixed;inset:0;
+            background-size:cover;background-position:center;
+            z-index:-2;transition:opacity 0.8s ease-in-out;
+        }
+        .bg-slider::after{
+            content:"";position:absolute;inset:0;
+            background:rgba(0,0,0,0.55);
+        }
+
+        /* Hero */
+        .hero{
+            min-height:100vh;display:flex;align-items:center;justify-content:center;
+            text-align:center;padding:120px 20px 60px;
+        }
+        .hero-content{max-width:900px;}
+        .hero-content h1{
+            font-size:75px;font-weight:900;letter-spacing:1px;line-height:1.05;
+        }
+        .hero-content h1 span{color:var(--primary);}
+        .hero-content p{
+            margin-top:18px;font-size:18px;color:#f3f4f6;line-height:1.6;
+        }
+
+        .actions{
+            margin-top:30px;display:flex;justify-content:center;
+            gap:18px;flex-wrap:wrap;
+        }
+        .btn{
+            padding:14px 22px;border-radius:12px;font-weight:900;
+            text-decoration:none;transition:.2s;display:inline-block;
+        }
+        .btn-primary{background:var(--primary);color:white;}
+        .btn-primary:hover{background:#e64a19;}
+        .btn-outline{border:2px solid white;color:white;}
+        .btn-outline:hover{background:white;color:#111;}
+        .hint{margin-top:30px;font-weight:700;opacity:.85;}
+
+        /* Menu section */
+        .menu-section{
+            padding:70px 60px;
+            background:var(--menu-bg);
+            color:var(--text-dark);
+        }
+        .menu-section h2{
+            text-align:center;font-size:34px;font-weight:900;margin-bottom:20px;
+        }
+
+        /* Search + Category tabs */
+        .controls{
+            max-width:1200px;margin:0 auto 20px;
+            display:flex;gap:12px;flex-wrap:wrap;
+            align-items:center;justify-content:space-between;
+        }
+
+        .search{
+            flex:1;min-width:240px;
+        }
+        .search input{
+            width:100%;padding:12px 14px;border-radius:12px;
+            border:1px solid #ddd;outline:none;font-size:15px;background:white;
+        }
+
+        .tabs{
+            display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;
+        }
+
+        .tab{
+            border:none;padding:10px 14px;border-radius:999px;
+            background:#eaeaea;font-weight:900;cursor:pointer;
+            transition:0.25s ease;
+        }
+
+        /* ✅ Animated active tab */
+        .tab.active{
+            background:var(--primary);color:white;
+            transform:translateY(-2px) scale(1.05);
+            box-shadow:0 10px 25px rgba(255,87,34,0.25);
+        }
+
+        /* Grid */
+        .grid{
+            display:grid;grid-template-columns:repeat(3, 1fr);gap:18px;
+            max-width:1200px;margin:0 auto;
+        }
+        .card{
+            background:white;border-radius:14px;padding:18px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.12);
+            text-align:center;
+            animation:fadeUp .3s ease;
+        }
+        @keyframes fadeUp{
+            from{opacity:0;transform:translateY(10px);}
+            to{opacity:1;transform:translateY(0);}
+        }
+
+        .food-img{
+            width:140px;height:140px;border-radius:50%;
+            object-fit:cover;display:block;margin:0 auto 12px;
+            box-shadow:0 10px 22px rgba(0,0,0,0.20);
+        }
+        .no-img{
+            width:140px;height:140px;border-radius:50%;
+            background:#e5e7eb;display:flex;align-items:center;justify-content:center;
+            margin:0 auto 12px;color:#6b7280;font-weight:800;
+        }
+        .desc{color:var(--muted);font-size:14px;min-height:34px;}
+        .price{color:var(--primary);font-weight:900;margin:8px 0;}
+
+        .add{
+            display:inline-block;margin-top:10px;padding:10px 14px;
+            background:var(--primary);color:white;border-radius:10px;
+            text-decoration:none;font-weight:900;
+        }
+        .add:hover{background:#e64a19;}
+
+        @media(max-width:1000px){
+            .grid{grid-template-columns:repeat(2,1fr);}
+            .hero-content h1{font-size:54px;}
+            .nav{padding:16px 25px;}
+            .menu-section{padding:60px 25px;}
+        }
+        @media(max-width:600px){
+            .grid{grid-template-columns:1fr;}
+            .hero-content h1{font-size:42px;}
+            .nav{padding:14px 18px;}
+            .menu-section{padding:60px 18px;}
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="nav">
+    <div class="brand">🍽️ FOODIE HUB</div>
+    <ul>
+        <li><a href="/">HOME</a></li>
+        <li><a href="#menu">MENU</a></li>
+        <li><a href="/cart/">CART</a></li>
+        <li><a href="/admin/">ADMIN</a></li>
+    </ul>
+    <a class="btn-sm" href="#menu">Order Now</a>
+</div>
+
+<div id="bgSlider" class="bg-slider"></div>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>BEST QUALITY <span>FOOD</span></h1>
+        <p>
+            Fresh, tasty and hygienic food delivered to your doorstep.
+            Explore our menu and order your favourite dishes in seconds.
+        </p>
+
+        <div class="actions">
+            <a class="btn btn-primary" href="#menu">View Menu</a>
+            <a class="btn btn-outline" href="/cart/">Go to Cart</a>
+        </div>
+
+        <div class="hint">⬇ Scroll to see menu</div>
+    </div>
+</section>
+
+<section class="menu-section" id="menu">
+    <h2>Our Special Menu</h2>
+
+    <!-- ✅ Search + Category filter -->
+    <div class="controls">
+        <div class="search">
+            <input id="searchInput" type="text" placeholder="Search food... (ex: dosa, biryani)">
+        </div>
+
+        <div class="tabs" id="tabs">
+            <button class="tab active" data-category="all">All</button>
+            {% for cat in categories %}
+                <button class="tab" data-category="{{ cat|lower }}">{{ cat }}</button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="grid" id="grid">
+        {% for food in foods %}
+        <div class="card"
+             data-name="{{ food.name|lower }}"
+             data-category="{{ food.category|lower }}">
+
+            {% if food.image %}
+                <img src="{{ food.image.url }}" class="food-img" alt="{{ food.name }}">
+            {% else %}
+                <div class="no-img">No Image</div>
+            {% endif %}
+
+            <h3>{{ food.name }}</h3>
+            <p class="desc">{{ food.description }}</p>
+            <p class="price">₹{{ food.price }}</p>
+
+            <a class="add" href="/add/{{ food.id }}/">Add to Cart</a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<script>
+    // ✅ Background slider using food images
+    const foodsImgs = [
+        {% for food in foods %}
+        "{% if food.image %}{{ food.image.url }}{% endif %}",
+        {% endfor %}
+    ].filter(x => x.trim() !== "");
+
+    const bg = document.getElementById("bgSlider");
+    let i = 0;
+
+    function setBg(img){
+        bg.style.opacity = 0;
+        setTimeout(() => {
+            bg.style.backgroundImage = `url('${img}')`;
+            bg.style.opacity = 1;
+        }, 300);
+    }
+
+    if(foodsImgs.length > 0){
+        setBg(foodsImgs[0]);
+        setInterval(() => {
+            i = (i + 1) % foodsImgs.length;
+            setBg(foodsImgs[i]);
+        }, 3000);
+    } else {
+        bg.style.backgroundImage =
+          "url('https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=1600&q=80')";
+    }
+
+    // ✅ Category tabs + Search
+    const tabs = document.querySelectorAll(".tab");
+    const cards = document.querySelectorAll(".card");
+    const searchInput = document.getElementById("searchInput");
+    let activeCategory = "all";
+
+    function applyFilters(){
+        const q = searchInput.value.toLowerCase().trim();
+
+        cards.forEach(card => {
+            const name = card.dataset.name;
+            const cat = card.dataset.category;
+
+            const matchSearch = name.includes(q);
+            const matchCat = (activeCategory === "all") || (cat === activeCategory);
+
+            card.style.display = (matchSearch && matchCat) ? "block" : "none";
+        });
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            tabs.forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+            activeCategory = tab.dataset.category;
+            applyFilters();
+        });
+    });
+
+    searchInput.addEventListener("input", applyFilters);
+</script>
+
+</body>
+</html>
